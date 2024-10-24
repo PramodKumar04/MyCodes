@@ -1,0 +1,107 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct Sparse{
+        int row,col,val;
+        struct Sparse* next;
+}node;
+node* head=NULL;
+node* create(int row,int col,int val){
+        node* l1=(node*)malloc(sizeof(node));
+        l1->row=row;
+        l1->col=col;
+        l1->val=val;
+        return l1;
+}
+node createSparse(int n){
+        int row,col,val;
+        node* last =NULL;
+        for(int i=1;i<=n;i++){
+                printf("please enter row,col,val: ");
+                scanf("%d %d %d",&row,&col,&val);
+                node* new_node=create(row,col,val);
+                if(!head){
+                        head=new_node;
+                }
+                else{
+                        last->next=new_node;
+                }
+                last=new_node;
+        }
+        return head;
+}
+node* add(node* a,node* b){
+        node* sum1=NULL;
+        node* last;
+        while(a&&b){
+                node* sum=(node*)malloc(sizeof(node));
+                if(a->row < b->row){
+                        sum=a;
+                        a=a->next;
+                }
+                else if(a->row > b->row){
+                        sum=b;
+                        b=b->next;
+                }
+                else{
+                        if(a->col<b->col){
+                                sum=a;
+                                a=a->next;
+                        }
+                        else if(a->col > b->col){
+                                sum=b;
+                                b=b->next;
+                        }
+                        else{
+                                sum->val=b->val+a->val;
+                                sum->row=a->row;
+                                sum->col=b->col;
+                        }
+                }
+                sum->next=NULL;
+                if(sum1==NULL){
+                        sum1=sum;
+                        last=sum;
+                }
+                else{
+                        last->next=sum;
+                        last=sum;
+                }
+        }
+        if(a){
+                last->next=a;
+        }
+        if(b){
+                last->next=b;
+        }
+        return sum1;
+}
+void display(node* a){
+        node*temp=a;
+        while(temp){
+                printf("%d %d %d",temp->row,temp->col,temp->val);
+                temp=temp->next;
+        }
+}
+int main(){
+        node* s1;
+        node*s2;
+        int m,n;
+        printf("enter no.of non-zero elements for matrix1,matrix2: ");
+        scanf("%d %d",&n,&m);
+        s1=createSparse(n);
+        s2=createSparse(m);
+        node*s3= add(s1,s2);
+        printf("the result is: \n");
+        display(s3);
+        free(s1);
+        free(s2);
+        free(s3);
+        return 0;
+}
+
+~
+~
+~
+~
+~
+~

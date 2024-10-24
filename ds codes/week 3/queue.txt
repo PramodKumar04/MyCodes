@@ -1,0 +1,119 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef struct{
+        int rear;
+        int front;
+        int size;
+        int *a;
+}queue;
+queue* create(queue *q1){
+        q1->rear=-1;
+        q1->front=-1;
+        printf("please enter the size: ");
+        scanf("%d",&q1->size);
+        q1->a=(int*)malloc(q1->size*sizeof(int));
+        return q1;
+}
+int isFull(queue *q1){
+        return q1->front == q1->size-1;
+}
+int isEmpty(queue *q1){
+        return q1->rear==-1;
+}
+void enqueue(queue *q1,int element){
+        if(isFull(q1)){
+                printf("queue overflown\n");
+        }
+        else if(q1->front==-1 && q1->rear==-1){
+                q1->front++;
+                q1->rear++;
+                q1->a[q1->front]=element;
+        }
+        else{
+                q1->a[++q1->front]=element;
+        }
+}
+int dequeue(queue *q1){
+        if(isEmpty(q1)){
+                printf("stack underflown\n");
+                return 0;
+        }
+        return q1->a[q1->rear++];
+
+}
+int rear(queue *q1){
+        if(isEmpty(q1)){
+                printf("stack under flown\n");
+                return 0;
+        }
+        return q1->a[q1->rear];
+}
+int front(queue *q1){
+        if(isEmpty(q1)){
+                printf("stack underflown\n");
+                return 0;
+        }
+        return q1->a[q1->front];
+}
+void display(queue *q1){
+        if(isEmpty(q1)){
+                printf("stack underflown\n");
+                return;
+        }
+        for(int i=q1->rear;i<=q1->front;i++){
+                printf("%d \n",q1->a[i]);
+        }
+}
+int main(){
+        queue *q1;
+        create(q1);
+        int a,element;
+        while(1){
+                printf("1.enqueue\n2.dequeue\n3.rear\n4.front\n5.display\n0.end\n");
+                printf("please enter your choice: ");
+                scanf("%d",&a);
+                switch(a){
+                        case 1:scanf("%d",&element);
+                               enqueue(q1,element);
+                               break;
+
+                        case 2:if(isEmpty(q1)){
+                                       printf("stack underflown\n");
+                                }
+                               else{
+                               printf("the dequeued element is %d\n",dequeue(q1));
+                               }
+                               break;
+                        case 3:if(isEmpty(q1)){
+                                       printf("stack underflown\n");
+                                }
+                                else{
+                               printf("the element at rear is %d\n",rear(q1));
+                                }
+                               break;
+                        case 4:if(isEmpty(q1)){
+                                       printf("stack underflown\n");
+                                }
+                                else{
+                                     printf("the element at front is %d\n",front(q1));
+                                }
+                                 break;
+                        case 5:display(q1);
+                               break;
+                        case 0:printf("Thank You.\n");
+                               break;
+                        default:printf("Invalid\n");
+                }
+                if(a==0){
+                        break;
+                }
+        }
+        return 0;
+}
+
+
+
+
+~
+~

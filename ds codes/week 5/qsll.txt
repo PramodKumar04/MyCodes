@@ -1,0 +1,82 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct queue
+{
+        int data;
+        struct queue *next;
+}queue;
+struct queue *head=NULL;
+void enqueue(int element)
+{
+        struct queue *newnode=(queue*)malloc(sizeof(queue));
+        newnode->data=element;
+        newnode->next=NULL;
+        if(head==NULL)
+                head=newnode;
+        struct queue *temp=head;
+        while(temp->next!=NULL)
+        {
+                temp=temp->next;
+        }
+        temp->next=newnode;
+        newnode->next=NULL;
+}
+int dequeue()
+{
+        if(!head){
+
+            printf("List is empty");
+            return -1;
+        }
+
+         struct queue *temp=head;
+         head=head->next;
+
+         return temp->data;
+
+}
+void display()
+{
+        struct queue *temp=head;
+        if(!head)
+                printf("No list exists");
+        else
+        {
+                printf("Elements in the list are");
+                while(temp!=NULL)
+                {
+
+                        printf("%d ",temp->data);
+                        temp=temp->next;
+                }
+                printf("\n");
+        }}
+   int main(){
+   int choice;
+   int element;
+        do{
+        printf("1.Enqueue\n2.Dequeue\n3.Display\n4.Exit\nEnter your choice:");
+        scanf("%d",&choice);
+        switch (choice){
+                case 1:
+
+                        printf("enter the element:");
+                        scanf("%d",&element);
+                        enqueue(element);
+                        break;
+                case 2:
+
+                        printf("Popped out element is %d \n",dequeue());
+
+                        break;
+                case 3:
+                        display();
+                        break;
+                case 4:exit(1);
+                default:printf("Enter valid option");
+                }
+        }
+        while(choice!=4);
+        return 0;
+   }
+

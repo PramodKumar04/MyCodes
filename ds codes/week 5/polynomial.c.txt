@@ -1,0 +1,115 @@
+//1602-23-737-160
+//program on polynomial addition and evaluation
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+typedef struct node{
+        int coeff;
+        int exp;
+        struct node* next;
+}node;
+node* head=NULL;
+node* create(){
+        int n;
+        printf("please enter no.of elements: ");
+        scanf("%d",&n);
+        int i;
+        node* poly=NULL;
+        node* last=NULL;
+        for(i=0;i<n;i++){
+                node* new_node=(node*) malloc(sizeof(node));
+                new_node->next=NULL;
+                printf("\nplease enter the coefficient and exp: ");
+                scanf("%d%d",&new_node->coeff,&new_node->exp);
+                if(poly==NULL){
+                        poly=last=new_node;
+                }
+                else{
+                        last->next=new_node;
+                        last=new_node;
+                }
+        }
+        return poly;
+}
+void display(node*);
+node*  add(node* a,node* b){
+
+        node* last=NULL;
+        node* res=NULL;
+        while(a!=NULL && b!=NULL)
+        {
+                node *temp=(node *)malloc(sizeof(node));
+                if(a->exp > b->exp){
+                        temp=a;
+                        a=a->next;
+                }
+                else if(a->exp<b->exp){
+                        temp=b;
+                        b=b->next;
+                }
+                else{
+                        temp->coeff=a->coeff+b->coeff;
+                        temp->exp=a->exp;
+                        a=a->next;
+                        b=b->next;
+                }
+                temp->next=NULL;
+
+                if(res==NULL){
+                        res=temp;
+                        last=temp;
+                }
+                else{
+                        last->next=temp;
+                        last=temp;
+                }
+
+        }
+        if(a!=NULL){
+                last->next=a;
+        }
+        if(b!=NULL){
+                last->next=b;
+       }
+
+        return res;
+}
+int eval(node *poly){
+        int x,sum=0;
+        printf("please enter the value of x: ");
+        scanf("%d",&x);
+        node*p =poly;
+        while(p){
+                sum+=pow(x,p->exp)*p->coeff;
+                p=p->next;
+        }
+        return sum;
+}
+void display(node* poly){
+        node* p=poly;
+        while(p!=NULL){
+                printf("%d x^%d ",p->coeff,p->exp);
+                p=p->next;
+                if(p !=NULL){
+                        printf("+");
+                }
+
+        }
+}
+int main(){
+        node* poly1=NULL;
+        node*poly2=NULL;
+        printf("please enter polynomial 1: \n");
+        poly1=create();
+        display(poly1);
+        printf("please enter polynomial 2: \n");
+        poly2=create();
+        display(poly2);
+        node* poly=(node*)malloc(sizeof(node));
+        poly=add(poly1,poly2);
+        printf("\nthe result is: \n");
+        display(poly);
+        printf("the result is:%d\n",eval(poly1));
+        free(poly1);
+        free(poly2);
+        return 0;

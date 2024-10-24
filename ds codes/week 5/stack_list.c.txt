@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct node {
+    int value;
+    struct node *next;
+} node;
+node *top = NULL;
+node* create() {
+    node* l1 = (node*)malloc(sizeof(node));
+    if (l1 == NULL) {
+        printf("Memory not allocated.\n");
+        return NULL;
+    }
+    printf("Please enter the value: ");
+    scanf("%d", &l1->value);
+    l1->next = NULL;
+
+    if (top == NULL) {
+        top = l1;
+    } else {
+        node *temp = top;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = l1;
+    }
+    return l1;
+}
+void insertBegin(int data) {
+    node* l1 = (node*)malloc(sizeof(node));
+    if (l1 == NULL) {
+        printf("Memory not allocated.\n");
+        return;
+    }
+    l1->value = data;
+    if(top==NULL){
+            l1->next=NULL;
+            top=l1;
+            return;
+    }
+    l1->next=top;
+    top = l1;
+}
+void pop() {
+    if(top==NULL){
+            printf("stack underflown");
+            return;
+    }
+    node*ptr=top;
+    printf("the popped element is:%d\n",ptr->value);
+    top=top->next;
+    free(ptr);
+}
+int peek(){
+        if(top==NULL)
+                return 0;
+        return top->value;
+}
+void display() {
+    node* temp = top;
+    if (temp == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    while (temp != NULL) {
+        printf("%d -> ", temp->value);
+        temp = temp->next;
+    }
+    printf("null\n");
+}
+
+int main() {
+    node* l1 = create();
+    int choice,p;
+    while(1){
+        printf("please enter your choice: \n");
+        printf("1.push\n2.display\n3.pop\n4.peek\n0.end\n");
+        scanf("%d",&choice);
+        switch(choice){
+            case 1:printf("enter an element: ");
+                   scanf("%d",&p);
+                   insertBegin(p);
+                   break;
+            case 2:display();
+                   break;
+            case 3:pop();
+                   break;
+            case 4:if(peek()){
+                           printf("the peeked element:%d\n",peek());
+                   }
+                   else{
+                           printf("underflown");
+                   }
+                   break;
+            case 0: printf("THANK YOU");
+                    break;
+            default:printf("INVALID");
+
+        }
+        if(choice==0){
+            break;
+        }
