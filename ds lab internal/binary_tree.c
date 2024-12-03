@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#define MAX_SIZE 100
 typedef struct bt{
         int value;
         struct bt* lchild;
@@ -10,33 +11,37 @@ typedef struct{
         bt** a;
         int size;
 }cqueue;
-cqueue* createQ(cqueue *q,int size){
+cqueue* createQ(cqueue *q){
     cqueue* cq1=(cqueue*)malloc(sizeof(cqueue));
     if(cq1==NULL){
         printf("memory not allocated");
         return NULL;
     }
     cq1->rear=cq1->front=-1;
-    cq1->size=size;
+    cq1->size=MAX_SIZE;
     cq1->a=(bt**)malloc(cq1->size*sizeof(bt*));
     return cq1;
 }
 int isFull(cqueue *cq1){
-    return((cq1->front+1)%cq1->size==cq1->rear);
+    return(cq1->size-1 == cq1->front );
 }
 int isEmpty(cqueue *cq1){
     return(cq1->rear==-1);
 }
-void enqueue(cqueue *cq1, bt* element){
+void enqueue(cqueue* cq1, bt* element){
     if (isFull(cq1)) {
         printf("Queue is overflown\n");
         return;
     }
-    if (isEmpty(cq1)) {
+    else if(cq1->front==-1 && cq1->rear==-1){
+        cq1->front++;
+        cq1->rear++;
+    }
+    else if (isEmpty(cq1)) {
         cq1->rear = cq1->front = 0;
     }
     else {
-        cq1->front = (cq1->front + 1) % cq1->size;
+        cq1->front = cq1->front+1;
     }
     cq1->a[cq1->front] = element;
 }
@@ -60,7 +65,7 @@ bt* dequeue(cqueue *cq1){
 
 }
 bt* create(int size){
-        cqueue *cq1=createQ(cq1,size);
+        cqueue *cq1=createQ(cq1);
         bt* root= (bt*)malloc(sizeof(bt));
         printf("please enter the value of root: ");
         scanf("%d",&root->value);
@@ -114,7 +119,7 @@ void pre_order(bt* p){
         }
 }
 void level_order(bt* root,int size){
-        cqueue *cq1=createQ(cq1,size);
+        cqueue *cq1=createQ(cq1);
         bt* temp=root;
         if(root==NULL){
                 printf("no binary tree found\n");
@@ -176,11 +181,9 @@ int search(int key,bt* root){
 
 }
 int main(){
-        int size,choice,x,key;
-        printf("please enter the size: ");
-        scanf("%d",&size);
+        int choice,x,key;
         bt* tree= (bt*)malloc(sizeof(bt));
-        tree=create(size);
+        tree=create(MAX_SIZE);
         while(1){
                 printf("\n1.in_order\n2.pre_order\n3.post_order\n4.count\n5.sum\n6.height\n7.level_order\n8.search\n0.end\n");
                 printf("please enter your choice: ");
