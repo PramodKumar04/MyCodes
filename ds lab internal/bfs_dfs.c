@@ -22,41 +22,41 @@ cqueue* create(int size) {
     return cq1;
 }
 
-int isFull(cqueue *cq1) {
-    return ((cq1->rear + 1) % cq1->size == cq1->front);
+int isFull(cqueue* cq1) {
+    return (cq1->size - 1 == cq1->front);
 }
 
-int isEmpty(cqueue *cq1) {
+int isEmpty(cqueue* cq1) {
     return (cq1->rear == -1);
 }
 
-void enqueue(cqueue *cq1, int element) {
+void enqueue(cqueue* cq1, int element) {
     if (isFull(cq1)) {
-        printf("Queue is full\n");
+        printf("Queue is overflown\n");
         return;
     }
-    if (isEmpty(cq1)) {
-        cq1->front = cq1->rear = 0;
+    if (cq1->front == -1 && cq1->rear == -1) {
+        cq1->front++;
+        cq1->rear++;
     } else {
-        cq1->rear = (cq1->rear + 1) % cq1->size;
+        cq1->front = cq1->front + 1;
     }
-    cq1->a[cq1->rear] = element;
+    cq1->a[cq1->front] = element;
 }
 
-int dequeue(cqueue *cq1) {
+int dequeue(cqueue* cq1) {
     if (isEmpty(cq1)) {
-        printf("Queue is empty\n");
-        return -1;
+        printf("Queue is underflown\n");
+        return 0;
     }
-    int ele = cq1->a[cq1->front];
+    int ele = cq1->a[cq1->rear];
     if (cq1->rear == cq1->front) {
-        cq1->rear = cq1->front = -1; 
+        cq1->rear = cq1->front = -1;
     } else {
-        cq1->front = (cq1->front + 1) % cq1->size;
+        cq1->rear++;
     }
     return ele;
 }
-
 void BFS(int G[][7], int start, int n) {
     int visited[7] = {0};
     cqueue* cq1 = create(7);
