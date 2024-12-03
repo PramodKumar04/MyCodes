@@ -1,115 +1,156 @@
 //1602-23-737-160
 //menu driven program on circular queue
-#include <stdio.h>
-#include <stdlib.h>
+
+#include<stdio.h>
+#include<stdlib.h>
 typedef struct{
-    int rear;
-    int front;
-    int size;
-    int *a;
-}cqueue;
-cqueue* create(){
-    cqueue*cq1=(cqueue*)malloc(sizeof(cqueue));
-    if(cq1==NULL){
-        printf("memory not allocated");
-        return NULL;
-    }
-    cq1->rear=-1;
-    cq1->front=-1;
-    printf("please enter the size: ");
-    scanf("%d",&cq1->size);
-    cq1->a=(int*)malloc(cq1->size*sizeof(int));
-    return cq1;
+        int f,r,size;
+        int *a;
+}Queue;
+
+Queue * createQueue(int size)
+{
+        Queue *q=(Queue*)malloc(sizeof(Queue));
+        q->f=q->r=-1;
+        q->size=size;
+        q->a=(int*)malloc(q->size*sizeof(int));
 }
-int isFull(cqueue *cq1){
-    return((cq1->front+1)%cq1->size==cq1->rear);
-}
-int isEmpty(cqueue *cq1){
-    return(cq1->rear==-1);
-}
-void enqueue(cqueue *cq1, int element){
-    if (isFull(cq1)) {
-        printf("Queue is overflown\n");
-        return;
-    }
-    if (isEmpty(cq1)) {
-        cq1->rear = cq1->front = 0;
-    } 
-    else {
-        cq1->front = (cq1->front + 1) % cq1->size;
-    }
-    cq1->a[cq1->front] = element;
+int isFull(Queue *q)
+{
+        if (q->r-q->f==1)
+        {return 1;
+        }
+        if (q->f==q->size-1&& q->r==0)
+        {
+                return 1;}
+        return 0;
 }
 
-void dequeue(cqueue *cq1){
-    if(isEmpty(cq1)){
-        printf("buffer is empty no data to burn\n");
-        return;
-    }
-    int burn_data=cq1->a[cq1->rear];
-    if(cq1->rear==cq1->front){
-        cq1->rear=cq1->front=-1;
-    }
-    else if(cq1->rear==cq1->size-1){
-        cq1->rear=0;
-    }
-    else{
-        cq1->rear++;
-    }
-    printf("the dequed element: %d\n",burn_data);
-}
-void peek(cqueue* cq1){
-    if(isEmpty(cq1)){
-        printf("QUEUE IS UNDERFLOWN\n");
-        return;
-    }
-    printf("the peeked element at rear: %d\n",cq1->a[cq1->rear]);
-    printf("the peeked element at front: %d\n",cq1->a[cq1->front]);
-}
-void display(cqueue*cq1){
-    if(isEmpty(cq1)){
-        printf("queue is underflown\n");
-        return;
-    }
-    printf("the elements are: ");
-    int i=cq1->rear;
-    while(1){
-        printf("%d ",cq1->a[i]);
-        if(i==cq1->front){
-            break;
+void enqueue(int element,Queue *q)
+{
+        if(isFull(q)){
+                printf("queue full");
+                return;
         }
-        i=(i+1)%cq1->size;
-    }
-    printf("\n");
-}
-int main(){
-        cqueue* cq1 = create();
-    int choice,p,pos;
-    while(1){
-        printf("please enter your choice: \n");
-        printf("1.insert data\n2.burn data\n3.peek\n4.display\n0.end\n");
-        scanf("%d",&choice);
-        switch(choice){
-            case 1:printf("enter an element: ");
-                   scanf("%d",&p);
-                   enqueue(cq1,p);
-                   break;
-            case 2:dequeue(cq1);
-                   break;
-            case 3:peek(cq1);
-                   break;
-            case 5:display(cq1);
-                   break;
-            case 0: printf("THANK YOU");
-                    break;
-            default:printf("INVALID");
-            
+        if (q->f==-1)
+        {
+                q->r++;
         }
-        if(choice==0){
-            break;
+         if(q->f==q->size-1)
+        {
+                q->f=0;
         }
-    }
-    free(cq1->a);
-    free(cq1);
-    return 0;
+        else{q->f++;}
+
+        q->a[q->f]=element;
+
 }
+int dequeue(Queue*q)
+{
+        if(q->f==-1){
+                printf("empty\n");
+                return NULL;
+        }
+        int b=q->a[q->r];
+
+        if(q->f==q->r)
+        {
+                q->f=q->r=-1;
+        }
+        else if(q->r==q->size-1)
+        {
+                q->r=0;
+        }
+        else{q->r++;}
+
+       return b;
+}
+void display(Queue *q)
+{        if(q->f==-1){
+                printf("empty\n");
+                }
+        if (q->f>q->r)
+        {
+        for (int i=q->r;i<=q->f;i++)
+        {
+                printf("%d ",q->a[i]);
+        }
+        }
+        else
+        {for (int i=q->r;i<=q->size-1;i++)
+                {
+                        printf("%d ",q->a[i]);
+                }
+                for (int i=0;i<=q->f;i++)
+                {
+                        printf("%d ",q->a[i]);
+                }
+        }
+
+}
+int front(Queue *q)
+{
+         if(q->f==-1){
+                printf("empty\n");
+                return NULL;
+
+        }
+         return q->a[q->f];
+}
+int rear(Queue *q)
+{
+         if(q->f==-1){
+                printf("empty\n");
+                return NULL;
+
+        }
+         return q->a[q->r];
+}
+
+int main()
+{
+        int size;
+        printf("enter size");
+        scanf("%d",&size);
+        Queue *q=createQueue(size);
+
+        int element,c,r=1;
+        while(r)
+        {
+            printf("Menu\n1.enqueue\n2.dequeue\n3.display\n4.front\n5.rear\n6.exit\nEnter Choice:");
+            scanf("%d",&c);
+            switch (c)
+            {
+                case 1:
+                        scanf("%d",&element);
+                        enqueue(element,q);
+                        break;
+                case 2:
+                        if (q->f==-1)
+                        {printf("empty");}
+                        else{
+
+                        printf("%d",dequeue(q));
+                                        }
+
+                        break;
+                case 3:
+                        display(q);
+                        break;
+                case 4:
+                        printf("%d",front(q));
+                        break;
+                case 5:
+
+                        printf("%d",rear(q));
+                        break;
+                case 6:
+                        r=0;
+                        break;
+                default:
+                        printf("wrong Choice");
+
+            }
+        }   
+}
+
